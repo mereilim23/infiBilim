@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Менің тапсырмаларым - InfoBilim</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .assignments-page {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .page-sub {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        /* Class code form - кішірек әрі әдемі */
+        .code-form-container {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .code-icon {
+            background: #eef2ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4f46e5;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .code-form {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .code-input {
+            width: 140px;
+            padding: 10px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            outline: none;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .code-input:focus {
+            border-color: #4f46e5;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .code-input::placeholder {
+            letter-spacing: normal;
+            font-weight: 400;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .code-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .code-btn:hover {
+            background: #6366f1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+        }
+
+        .code-hint {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* Classes tabs */
+        .classes-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 16px;
+        }
+
+        .class-tab {
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .class-tab:hover {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background: #f5f3ff;
+        }
+
+        .class-tab.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        .class-tab .badge {
+            background: rgba(0,0,0,0.05);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .class-tab.active .badge {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Selected class header */
+        .selected-class-header {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #4f46e5;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .selected-class-info h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .selected-class-info p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .selected-class-code {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #4f46e5;
+            border: 1px dashed #cbd5e1;
+        }
+
+        /* Assignment cards */
+        .assignment-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+
+        .assignment-card:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
+        }
+
+        .assignment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .assignment-class-badge {
+            font-size: 12px;
+            color: #4f46e5;
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .assignment-date {
+            font-size: 12px;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .assignment-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .assignment-desc {
+            color: #475569;
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .assignment-footer {
+            font-size: 12px;
+            color: #94a3b8;
+            padding-top: 8px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+            border: 2px dashed #e2e8f0;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        /* --- Модальды профиль терезесі --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 420px;
+            width: 90%;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Профиль модальды терезесі */
+        .profile-modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 32px 24px;
+            text-align: center;
+            color: white;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 36px;
+            font-weight: 800;
+            border: 3px solid rgba(255,255,255,0.5);
+        }
+        .profile-modal-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .profile-modal-role {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        .profile-modal-body {
+            padding: 24px;
+        }
+        .profile-info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .profile-info-icon {
+            width: 36px;
+            height: 36px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6366f1;
+        }
+        .profile-info-text {
+            flex: 1;
+        }
+        .profile-info-label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .profile-info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .profile-logout-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 16px;
+            background: #fef2f2;
+            border: none;
+            border-radius: 14px;
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .profile-logout-btn:hover {
+            background: #fee2e2;
+        }
+
+        .user-menu {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .code-form-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .code-form {
+                flex-direction: column;
+            }
+
+            .code-input {
+                width: 100%;
+                max-width: none;
+            }
+
+            .code-hint {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .selected-class-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+
+        /* ===== АДАПТАЦИЯ ===== */
+        .hamburger-s {
+            display: none; flex-direction: column; gap: 5px; cursor: pointer;
+            padding: 6px; background: rgba(99,102,241,0.1); border: none; border-radius: 8px;
+        }
+        .hamburger-s span { display: block; width: 22px; height: 2px; background: var(--primary, #6366f1); border-radius: 2px; transition: all 0.3s; }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .container { padding: 0 20px; }
+        }
+        @media (max-width: 767px) {
+            .container { padding: 0 16px; }
+            .header { padding: 14px 0; }
+            .navbar { flex-wrap: nowrap; gap: 12px; }
+            .nav-right { gap: 12px; }
+            .nav-link { font-size: 13px; }
+            .logo-text { font-size: 18px; }
+            .user-info { padding: 6px 10px; }
+            .user-avatar { width: 30px; height: 30px; font-size: 13px; }
+            .main-content { padding: 20px 0 60px; }
+            .page-header { margin-bottom: 20px; }
+            .page-title { font-size: 24px; }
+            .page-sub { font-size: 14px; }
+        }
+        @media (max-width: 380px) {
+            .page-title { font-size: 20px; }
+        }
+
+        @media (max-width: 767px) {
+            .code-form-container { flex-direction: column; align-items: flex-start; padding: 14px 16px; }
+            .code-form { flex-direction: column; width: 100%; }
+            .code-input { width: 100%; }
+        }
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M8 3L4 7L8 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 3L20 7L16 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M14 3L10 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">InfoBilim</span>
+                </div>
+                <nav class="nav">
+                    <a href="/glav" class="nav-link">Басты бет</a>
+                    <a href="/certificates" class="nav-link">Сертификаттар</a>
+                    <a href="/assignments" class="nav-link active">Тапсырмалар</a>
+                    <div class="user-menu" id="showProfileBtn">
+                        <div class="user-avatar">{{ user_name[0] | upper }}</div>
+                        
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="assignments-page">
+                <div class="page-header">
+                    <h1 class="page-title">Менің тапсырмаларым</h1>
+                    <p class="page-sub">Сынып кодын енгізіп, өз сыныбыңыздың тапсырмаларын көріңіз</p>
+                </div>
+
+                <!-- Alert messages -->
+                {% if error %}
+                <div class="alert alert-error">
+                    <span>❌</span>
+                    <span>{{ error }}</span>
+                </div>
+                {% endif %}
+
+                {% if success %}
+                <div class="alert alert-success">
+                    <span>✅</span>
+                    <span>{{ success }}</span>
+                </div>
+                {% endif %}
+
+                <!-- Class code form -->
+                <div class="code-form-container">
+                    <form class="code-form" method="POST" action="/get-class-tasks">
+                        <input type="text"
+                               name="class_code"
+                               class="code-input"
+                               placeholder="СЫНЫП КОДЫ"
+                               maxlength="6"
+                               style="text-transform: uppercase;"
+                               required>
+                        <button type="submit" class="code-btn">
+                            <span>Кіру</span>
+                            <span>→</span>
+                        </button>
+                    </form>
+                    <div class="code-hint">
+                        6 таңбалы код
+                    </div>
+                </div>
+
+                <!-- Classes tabs -->
+                {% if classes and classes|length > 1 %}
+                <div class="classes-tabs">
+                    {% for c in classes %}
+                    <a href="/class/{{ c.id }}/assignments"
+                       class="class-tab {% if selected_class and selected_class.id == c.id %}active{% endif %}">
+                        {{ c.name }}
+                        <span class="badge">{{ c.assignments_count or 0 }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Selected class info -->
+                {% if selected_class %}
+                <div class="selected-class-header">
+                    <div class="selected-class-info">
+                        <h2>{{ selected_class.name }}</h2>
+                        <p>Сынып коды: <strong>{{ selected_class.invite_code }}</strong></p>
+                    </div>
+                    <div class="selected-class-code">
+                        {{ selected_class.invite_code }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Assignments list -->
+                {% if assignments %}
+                    {% for a in assignments %}
+                    <div class="assignment-card">
+                        <div class="assignment-header">
+                            <span class="assignment-class-badge">{{ a.class_name }}</span>
+                            {% if a.due_date %}
+                            <span class="assignment-date">
+                                📅 {{ a.due_date[:10] }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <h3 class="assignment-title">{{ a.title }}</h3>
+                        <div class="assignment-desc">{{ a.description }}</div>
+                        <div class="assignment-footer">
+                            Құрылған: {{ a.created_at[:16] if a.created_at else '' }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    {% if selected_class %}
+                    <div class="empty-state">
+                        <h3 class="empty-title">Тапсырмалар жоқ</h3>
+                        <p class="empty-text">{{ selected_class.name }} сыныбында әзірше тапсырмалар жоқ</p>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <h3 class="empty-title">Сынып кодын енгізіңіз</h3>
+                        <p class="empty-text">Жоғарыдағы өріске сынып кодын жазып, өз сыныпыңыздың тапсырмаларын көріңіз</p>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- МОДАЛЬДЫ ТЕРЕЗЕ: ПРОФИЛЬ -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="profile-modal-header">
+                <div class="profile-avatar">{{ user_name[0] if user_name else 'П' }}</div>
+                <div class="profile-modal-name">{{ user_name if user_name else 'Пайдаланушы' }}</div>
+                <div class="profile-modal-role">Оқушы</div>
+            </div>
+            <div class="profile-modal-body">
+                <div class="profile-info-item">
+                    <div class="profile-info-icon">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <circle cx="9" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M15 15C15 12.2386 12.3137 10 9 10C5.68629 10 3 12.2386 3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="profile-info-text">
+                        <div class="profile-info-label">Толық аты</div>
+                        <div class="profile-info-value">{{ user_name if user_name else 'Пайдаланушы' }}</div>
+                    </div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="profile-info-icon">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <rect x="3" y="3" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M9 7V11M7 9H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="profile-info-text">
+                        <div class="profile-info-label">Сынып</div>
+                        <div class="profile-info-value">7-сынып</div>
+                    </div>
+                </div>
+                <button class="profile-logout-btn" id="profileLogoutBtn">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M13 14L17 10L13 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M17 10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M7 17H4C3.44772 17 3 16.5523 3 16V4C3 3.44772 3.44772 3 4 3H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Шығу
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Профиль модальды терезесін басқару
+        const profileModal = document.getElementById('profileModal');
+        const showProfileBtn = document.getElementById('showProfileBtn');
+
+        function closeProfileModal() {
+            if (profileModal) profileModal.classList.remove('active');
+        }
+
+        function openProfileModal() {
+            if (profileModal) profileModal.classList.add('active');
+        }
+
+        if (showProfileBtn) {
+            showProfileBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openProfileModal();
+            });
+        }
+
+        // Сыртқы жерді басқанда жабу
+        window.addEventListener('click', function(e) {
+            if (e.target === profileModal) closeProfileModal();
+        });
+
+        // Шығу
+        const profileLogoutBtn = document.getElementById('profileLogoutBtn');
+        if (profileLogoutBtn) {
+            profileLogoutBtn.addEventListener('click', function() {
+                if (confirm('Шығуға сенімдісіз бе?')) {
+                    window.location.href = '/logout';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

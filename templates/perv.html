@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoBilim - Білім беру платформасы</title>
+    <link rel="stylesheet" href="../static/perv.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 3L4 7L8 11" stroke="url(#logo-gradient)" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M16 3L20 7L16 11" stroke="url(#logo-gradient)" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M14 3L10 11" stroke="url(#logo-gradient)" stroke-width="2.5" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#6366f1"/>
+                                <stop offset="100%" style="stop-color:#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="logo-text">InfoBilim</span>
+                </div>
+                <button class="hamburger-btn" id="hamburgerLanding"><span></span><span></span><span></span></button>
+                <ul class="nav-menu" id="navMenuLanding">
+                    <li><a href="#home" class="nav-link">Басты бет</a></li>
+                    <li><a href="#about" class="nav-link">Біз туралы</a></li>
+                    <li><a href="#features" class="nav-link">Мүмкіндіктер</a></li>
+                </ul>
+                <button class="contact-btn">
+                    <span>Байланысу</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="hero-badge">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 1L10 6L15 6.5L11.5 10L12.5 15L8 12.5L3.5 15L4.5 10L1 6.5L6 6L8 1Z"/>
+                        </svg>
+                         Мұғалім және оқушы үшін
+                    </div>
+                    <h1 class="hero-title">
+                        Білім беру үшін<br>
+                        жарқын <span class="highlight">болашақ.</span>
+                    </h1>
+                    <p class="hero-description">
+                        Білім беру инновациямен кездесетін заманауи оқу ортасы, әрбір оқушыны табысқа жетелейді.Тікелей бақылау және жеке тәсіл.
+                    </p>
+                    <div class="hero-buttons">
+                       <a href="/login" class="apply-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 3V17M3 10H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Қазір бастау
+                        </a>
+
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-illustration">
+                        <div class="illustration-bg">
+                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.2" />
+                                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.2" />
+                                    </linearGradient>
+                                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#ec4899;stop-opacity:0.2" />
+                                        <stop offset="100%" style="stop-color:#f43f5e;stop-opacity:0.2" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="200" cy="200" r="150" fill="url(#grad1)"/>
+                                <circle cx="250" cy="150" r="100" fill="url(#grad2)"/>
+                            </svg>
+                        </div>
+                        <div class="floating-elements">
+                            <div class="float-card card-1">
+                                <div class="card-icon">📚</div>
+                                <div class="card-text">
+                                    <h4>100+</h4>
+                                    <p>Тест сұрақтары</p>
+                                </div>
+                            </div>
+                            <div class="float-card card-2">
+                                <div class="card-icon">🎯</div>
+                                <div class="card-text">
+
+                                    <p>Рейтинг жүйесі</p>
+                                </div>
+                            </div>
+                            <div class="float-card card-3">
+                                <div class="card-icon">⚡</div>
+                                <div class="card-text">
+                                    <h4>24/7</h4>
+                                    <p>Қолжетімділік</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="central-image">
+                            <div class="image-glow"></div>
+                            <div class="laptop-mockup">💻</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-header">
+                <h2 class="section-title">Платформаның артықшылықтары</h2>
+                <p class="section-subtitle">
+                    InfoBilim - бұл заманауи технологиялар мен дәстүрлі білім берудің үздік комбинациясы
+                </p>
+            </div>
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon purple">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Интерактивті сабақ тапсырмалары</h3>
+                    <p class="feature-desc">
+                        Тест және практикалық тапсырмалармен толықтырылған қызықты оқу материалдары
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon pink">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Прогресс бақылау</h3>
+                    <p class="feature-desc">
+                        Нақты уақытта оқушының үлгерімін қадағалау және кері байланыс беру жүйесі
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon blue">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="8" r="5" stroke="currentColor" stroke-width="2"/>
+                            <path d="M20 21C20 16.5817 16.4183 13 12 13C7.58172 13 4 16.5817 4 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Жеке кабинет</h3>
+                    <p class="feature-desc">
+                        Әрбір оқушы үшін жеке профиль, тарих және жетістіктер жүйесі
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <div class="feature-icon green">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Кез келген уақытта</h3>
+                    <p class="feature-desc">
+                        24/7 қолжетімділік - өзіңізге ыңғайлы уақытта оқуға мүмкіндік
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-card">
+                    <div class="feature-icon orange">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Сертификаттар</h3>
+                    <p class="feature-desc">
+                        Бөлім аяқтаған соң электронды сертификат алу мүмкіндігі
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-card">
+                    <div class="feature-icon teal">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M23 21V19C23 18.0506 22.6188 17.1882 22 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.64026 17.4962 4.48126 17.7699 5.46263C18.0436 6.444 17.9355 7.49016 17.4672 8.39375C16.9989 9.29734 16.2055 9.98913 15.2501 10.3269C14.2947 10.6646 13.2478 10.6247 12.32 10.215" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Мұғаліммен байланыс</h3>
+                    <p class="feature-desc">
+                        Мұғалім тапсырмасын тікелей қарау
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-left">
+                    <div class="about-image">
+                        <div class="about-placeholder">
+                            <div class="rocket-icon">🚀</div>
+                            <div class="sparkles">✨</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-right">
+                    <div class="about-badge">Біз туралы</div>
+                    <h2 class="about-title">ИнфоБілім платформасы</h2>
+                    <p class="about-text">
+                        InfoBilim - қазақстандық инновациялық білім беру платформасы.Оқушыларға сапалы білім алуға және өз әлеуетін ашуға көмектесуге тырысамыз.
+                    </p>
+                    <div class="stats-row">
+                        <div class="stat-box">
+
+                            <p>Оқушылар</p>
+                        </div>
+                        <div class="stat-box">
+
+                            <p>Мұғалімдер</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>10+</h3>
+                            <p>Курстар</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="footer-logo">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                            <path d="M8 3L4 7L8 11" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M16 3L20 7L16 11" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M14 3L10 11" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                        <span>InfoBilim</span>
+                    </div>
+                    <p class="footer-desc">
+                        Жарқын болашақ үшін білім беру
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="../static/js/script.js"></script>
+    <script>
+        const hamLanding = document.getElementById('hamburgerLanding');
+        const navMenuLanding = document.getElementById('navMenuLanding');
+        if (hamLanding && navMenuLanding) {
+            hamLanding.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('open');
+                navMenuLanding.classList.toggle('open');
+            });
+            document.addEventListener('click', function(e) {
+                if (!hamLanding.contains(e.target) && !navMenuLanding.contains(e.target)) {
+                    hamLanding.classList.remove('open');
+                    navMenuLanding.classList.remove('open');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

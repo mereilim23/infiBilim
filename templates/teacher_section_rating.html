@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ class.name }} — Рейтинг кестесі</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #222535;
+            --border: #2e3147;
+            --accent: #6c63ff;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+            --green: #43e97b;
+            --yellow: #ffd166;
+            --red: #ff6b6b;
+            --text: #e8eaf0;
+            --muted: #7b7f9e;
+            --radius: 16px;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px; height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); text-decoration: none; }
+        .logo span { color: var(--accent); }
+        .back-btn {
+            color: var(--muted); text-decoration: none;
+            padding: 8px 14px; border: 1px solid var(--border);
+            border-radius: 10px; font-size: 14px; transition: all .2s;
+        }
+        .back-btn:hover { color: var(--text); border-color: var(--accent); }
+
+        main { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+
+        .page-header { margin-bottom: 24px; }
+        .page-title { font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+        .page-sub { color: var(--muted); font-size: 13px; }
+
+        /* Section tabs */
+        .section-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .section-tab {
+            padding: 9px 18px; border-radius: 10px;
+            border: 1px solid var(--border); background: var(--surface);
+            color: var(--muted); font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all .2s; text-decoration: none; display: inline-block;
+        }
+        .section-tab:hover { border-color: var(--accent); color: var(--text); }
+        .section-tab.active {
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            border-color: var(--accent); color: white;
+        }
+
+        /* Stats */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+        .stat-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 18px 20px; text-align: center;
+        }
+        .stat-val { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; line-height: 1; }
+        .stat-val.accent { color: var(--accent); }
+        .stat-val.yellow { color: var(--yellow); }
+        .stat-val.green  { color: var(--green); }
+        .stat-val.purple { color: #a78bfa; }
+        .stat-label { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+        /* ── CLASS AVERAGE ROW ── */
+        .class-avg-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .class-avg-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .class-avg-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px; }
+        .class-avg-sub { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+        .topics-avg-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            divide-color: var(--border);
+        }
+        .topic-avg-cell {
+            padding: 16px 14px;
+            text-align: center;
+            border-right: 1px solid var(--border);
+        }
+        .topic-avg-cell:last-child { border-right: none; }
+
+        .topic-avg-label { font-size: 11px; color: var(--muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+        .topic-avg-num { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+        .topic-avg-num.hi   { color: var(--green); }
+        .topic-avg-num.mid  { color: var(--yellow); }
+        .topic-avg-num.lo   { color: var(--red); }
+        .topic-avg-num.none { color: var(--muted); }
+
+        .topic-avg-bar { height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin: 0 auto; max-width: 60px; }
+        .topic-avg-fill { height: 100%; border-radius: 3px; }
+        .fill-hi   { background: linear-gradient(90deg, var(--green), #06d6a0); }
+        .fill-mid  { background: linear-gradient(90deg, var(--yellow), #f4a261); }
+        .fill-lo   { background: linear-gradient(90deg, var(--red), #f77f00); }
+        .fill-none { background: var(--border); }
+
+        .topic-avg-count { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+        /* ── MAIN TABLE ── */
+        .table-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); overflow-x: auto;
+        }
+        .table-header {
+            padding: 16px 20px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+        }
+        .table-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; }
+        .legend { display: flex; gap: 14px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+        .leg-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+        .dot-green  { background: var(--green); }
+        .dot-yellow { background: var(--yellow); }
+        .dot-red    { background: var(--red); }
+        .dot-muted  { background: var(--border); }
+
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        thead tr { background: var(--surface2); }
+        th {
+            padding: 12px 14px; text-align: left;
+            font-size: 11px; font-weight: 600; color: var(--muted);
+            text-transform: uppercase; letter-spacing: .5px; white-space: nowrap;
+        }
+        th.tc { text-align: center; }
+        td { padding: 13px 14px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover td { background: rgba(108,99,255,.06); }
+
+        /* Position */
+        .pos { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 16px; color: var(--muted); width: 44px; }
+        .pos.p1 { color: var(--gold); }
+        .pos.p2 { color: var(--silver); }
+        .pos.p3 { color: var(--bronze); }
+
+        /* Student cell */
+        .student-cell { display: flex; align-items: center; gap: 10px; min-width: 140px; }
+        .ava {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Sora', sans-serif; font-weight: 700; font-size: 13px; color: white; flex-shrink: 0;
+        }
+        .s-name { font-weight: 600; font-size: 13px; }
+        .s-email { font-size: 11px; color: var(--muted); }
+
+        /* Score cell */
+        .score-cell { text-align: center; }
+        .score {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 50px; padding: 4px 9px; border-radius: 7px;
+            font-size: 12px; font-weight: 700; font-family: 'Sora', sans-serif;
+        }
+        .score.hi   { background: rgba(67,233,123,.12); color: var(--green); border: 1px solid rgba(67,233,123,.25); }
+        .score.mid  { background: rgba(255,209,102,.12); color: var(--yellow); border: 1px solid rgba(255,209,102,.25); }
+        .score.lo   { background: rgba(255,107,107,.12); color: var(--red); border: 1px solid rgba(255,107,107,.25); }
+        .score.none { background: rgba(123,127,158,.08); color: var(--muted); border: 1px solid rgba(123,127,158,.15); }
+
+        /* Average column */
+        .avg-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .avg-num { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 14px; }
+        .avg-num.hi   { color: var(--green); }
+        .avg-num.mid  { color: var(--yellow); }
+        .avg-num.lo   { color: var(--red); }
+        .avg-num.none { color: var(--muted); }
+        .mini-bar { width: 46px; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+        .mini-fill { height: 100%; border-radius: 2px; }
+        .mf-hi  { background: var(--green); }
+        .mf-mid { background: var(--yellow); }
+        .mf-lo  { background: var(--red); }
+
+        .empty-state { text-align: center; padding: 70px 20px; color: var(--muted); }
+        .empty-icon { font-size: 44px; margin-bottom: 14px; }
+
+        @media (max-width: 900px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .topics-avg-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        /* ===== АДАПТАЦИЯ (dark teacher pages) ===== */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            header { padding: 0 20px; }
+            main { padding: 28px 20px; }
+        }
+        @media (max-width: 767px) {
+            header { padding: 0 16px; height: auto; min-height: 56px; flex-wrap: wrap; gap: 8px; padding: 10px 16px; }
+            .back-btn { font-size: 12px; padding: 6px 10px; }
+            .back-btn span { display: none; }
+            main { padding: 20px 16px; }
+            .page-title { font-size: 20px; }
+            .page-sub { font-size: 12px; }
+            table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            thead, tbody, tr { min-width: 500px; }
+            td, th { padding: 10px 12px; font-size: 12px; }
+            .student-name { font-size: 13px; }
+            .student-avatar { width: 30px; height: 30px; font-size: 12px; }
+            .prog-wrap { min-width: 90px; }
+            .badge { font-size: 11px; padding: 3px 8px; }
+            .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+            .stat-value, .stat-val { font-size: 22px; }
+            .stat-card { padding: 14px; }
+            .rating-card-header { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; }
+            .page-title { font-size: 17px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/teacher" class="logo">ИнфоБілім<span>.</span></a>
+    <a href="/teacher/class/{{ class.id }}" class="back-btn">← Сыныпқа оралу</a>
+</header>
+
+<main>
+    <div class="page-header">
+        <h1 class="page-title"> {{ class.name }} — Рейтинг кестесі</h1>
+        <p class="page-sub">Бөлім бойынша әр оқушының тақырыптар нәтижесін көріңіз</p>
+    </div>
+
+    {% set section_names = {
+        1: '1-бөлім: Компьютерлік жад және оның өлшем бірліктері',
+        2: '2-бөлім: Желі және қауіпсіздік',
+        3: '3-бөлім: Электрондық кесте арқылы есептер шығару',
+        4: '4-бөлім: Python тіліндегі алгоритмдерді программалау',
+        5: '5-бөлім: Практикалық программалау'
+    } %}
+    {% set section_topic_counts = {1: 4, 2: 3, 3: 7, 4: 4, 5: 4} %}
+    {% set topic_count = section_topic_counts.get(current_section, 5) %}
+
+    <!-- Section tabs -->
+    <div class="section-tabs">
+        {% for sid, sname in section_names.items() %}
+        <a href="/teacher/class/{{ class.id }}/section-rating/{{ sid }}"
+           class="section-tab {% if sid == current_section %}active{% endif %}">{{ sname }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- Stats -->
+    {% set passed_count = section_data | selectattr('avg', 'ge', 70) | list | length %}
+    {% set avgs = section_data | map(attribute='avg') | list %}
+    {% set class_avg = (avgs | sum / avgs | length) | int if avgs else 0 %}
+    {% set all_done = section_data | selectattr('all_topics_done') | list | length %}
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-val accent">{{ section_data | length }}</div>
+            <div class="stat-label">Барлық оқушы</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val yellow">{{ class_avg }}%</div>
+            <div class="stat-label">Бөлім орташасы</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val green">{{ passed_count }}</div>
+            <div class="stat-label">70%+ оқушы</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-val purple">{{ all_done }}</div>
+            <div class="stat-label">Барлығын аяқтады</div>
+        </div>
+    </div>
+
+    <!-- ── CLASS AVERAGE PER TOPIC ── -->
+    {# Compute per-topic averages across all students #}
+    <div class="class-avg-card">
+        <div class="class-avg-header">
+            <span class="class-avg-title"> Сынып орташасы — тақырыптар бойынша</span>
+            <span class="class-avg-sub">Класс бұл тақырыпты қаншалықты меңгерген</span>
+        </div>
+        <div class="topics-avg-grid">
+            {% for t in range(1, topic_count + 1) %}
+                {# Collect scores for this topic from all students who attempted it #}
+                {% set t_scores = [] %}
+                {% for row in section_data %}
+                    {% if row.topics.get(t) is not none %}
+                        {% set _ = t_scores.append(row.topics.get(t)) %}
+                    {% endif %}
+                {% endfor %}
+                {% set t_avg = (t_scores | sum / t_scores | length) | int if t_scores else 0 %}
+                {% set attempted = t_scores | length %}
+                {% set total_students = section_data | length %}
+
+                <div class="topic-avg-cell">
+                    <div class="topic-avg-label">{{ t }}-тақырып</div>
+                    <div class="topic-avg-num {% if t_avg >= 70 %}hi{% elif t_avg >= 40 %}mid{% elif t_avg > 0 %}lo{% else %}none{% endif %}">
+                        {% if attempted > 0 %}{{ t_avg }}%{% else %}—{% endif %}
+                    </div>
+                    <div class="topic-avg-bar">
+                        <div class="topic-avg-fill {% if t_avg >= 70 %}fill-hi{% elif t_avg >= 40 %}fill-mid{% elif t_avg > 0 %}fill-lo{% else %}fill-none{% endif %}"
+                             style="width: {{ t_avg }}%"></div>
+                    </div>
+                    <div class="topic-avg-count">{{ attempted }}/{{ total_students }} өткен</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ── STUDENT TABLE ── -->
+    <div class="table-card">
+        <div class="table-header">
+            <div class="table-title">{{ section_names.get(current_section, current_section ~ '-бөлім') }}</div>
+            <div class="legend">
+                <div class="legend-item"><span class="leg-dot dot-green"></span>70%+ жақсы</div>
+                <div class="legend-item"><span class="leg-dot dot-yellow"></span>40–69% орташа</div>
+                <div class="legend-item"><span class="leg-dot dot-red"></span>&lt;40% төмен</div>
+                <div class="legend-item"><span class="leg-dot dot-muted"></span>— өтпеген</div>
+            </div>
+        </div>
+
+        {% if section_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:44px">#</th>
+                    <th>Оқушы</th>
+                    {% for t in range(1, topic_count + 1) %}
+                    <th class="tc">{{ t }}-тақырып</th>
+                    {% endfor %}
+                    <th class="tc">Орташа</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in section_data %}
+                <tr>
+                    <td class="pos {% if loop.index == 1 %}p1{% elif loop.index == 2 %}p2{% elif loop.index == 3 %}p3{% endif %}">
+                        {% if loop.index == 1 %}🥇
+                        {% elif loop.index == 2 %}🥈
+                        {% elif loop.index == 3 %}🥉
+                        {% else %}#{{ loop.index }}{% endif %}
+                    </td>
+                    <td>
+                        <div class="student-cell">
+                            <div class="ava">{{ row.name[0] | upper }}</div>
+                            <div>
+                                <div class="s-name">{{ row.name }}</div>
+                                <div class="s-email">{{ row.email }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    {% for t in range(1, topic_count + 1) %}
+                    <td class="score-cell">
+                        {% set pct = row.topics.get(t, None) %}
+                        {% if pct is not none %}
+                            <span class="score {% if pct >= 70 %}hi{% elif pct >= 40 %}mid{% else %}lo{% endif %}">{{ pct }}%</span>
+                        {% else %}
+                            <span class="score none">—</span>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                    <td>
+                        <div class="avg-wrap">
+                            <span class="avg-num {% if row.avg >= 70 %}hi{% elif row.avg >= 40 %}mid{% elif row.avg > 0 %}lo{% else %}none{% endif %}">
+                                {{ row.avg }}%
+                            </span>
+                            <div class="mini-bar">
+                                <div class="mini-fill {% if row.avg >= 70 %}mf-hi{% elif row.avg >= 40 %}mf-mid{% else %}mf-lo{% endif %}"
+                                     style="width: {{ row.avg }}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon"></div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px;">Нәтижелер жоқ</div>
+            <div style="font-size:13px;">Оқушылар осы бөлімнен тест тапсырмаған</div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5-бөлім - Практикалық программалау</title>
+    <link rel="stylesheet" href="/static/topicsstyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .main-content { padding: 40px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .topics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 24px; }
+        @media (max-width: 768px) { .topics-grid { grid-template-columns: 1fr; } }
+        .topic-card { transition: all 0.3s ease; }
+        .topic-status { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 3L4 7L8 11" stroke="url(#logo-gradient)" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M16 3L20 7L16 11" stroke="url(#logo-gradient)" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M14 3L10 11" stroke="url(#logo-gradient)" stroke-width="2.5" stroke-linecap="round"/>
+                        <defs><linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366f1"/><stop offset="100%" style="stop-color:#8b5cf6"/></linearGradient></defs>
+                    </svg>
+                    <span class="logo-text">ИнфоБілім</span>
+                </div>
+                <div class="nav-right">
+                    <a href="#" class="user-menu" id="showProfileBtn">
+                        <div class="user-info">
+                            <div class="user-avatar">{{ user_name[0] | upper }}</div>
+                            <span>{{ user_name }}</span>
+                        </div>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="/glav" class="breadcrumb-link">← Басты бетке</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="course-header">
+                <div class="course-icon">💾</div>
+                <div class="course-info">
+                    <div class="course-badge">5-бөлім</div>
+                    <h1 class="course-title">Практикалық программалау</h1>
+                    <p class="course-description">Программалаудың практикалық аспектілері: проблеманы қою, алгоритмді әзірлеу, программалау тіліне аудару және тестілеу</p>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <h3>Бөлім бойынша прогресс</h3>
+                    <span class="progress-percent" id="totalProgress">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="totalProgressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <p class="progress-text" id="progressText">0/4 тақырып аяқталды</p>
+            </div>
+
+            <div class="topics-section">
+                <h2 class="section-title">Тақырыптар</h2>
+                <div class="topics-grid" id="topicsGrid"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- МОДАЛЬДЫ ТЕРЕЗЕ: ПРОФИЛЬ -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="profile-modal-header">
+                <div class="profile-avatar">{{ user_name[0] if user_name else 'П' }}</div>
+                <div class="profile-modal-name">{{ user_name if user_name else 'Пайдаланушы' }}</div>
+                <div class="profile-modal-role">Оқушы</div>
+            </div>
+            <div class="profile-modal-body">
+                <div class="profile-info-item">
+                    <div class="profile-info-icon">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <circle cx="9" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M15 15C15 12.2386 12.3137 10 9 10C5.68629 10 3 12.2386 3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="profile-info-text">
+                        <div class="profile-info-label">Толық аты</div>
+                        <div class="profile-info-value">{{ user_name if user_name else 'Пайдаланушы' }}</div>
+                    </div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="profile-info-icon">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <rect x="3" y="3" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M9 7V11M7 9H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="profile-info-text">
+                        <div class="profile-info-label">Сынып</div>
+                        <div class="profile-info-value">7-сынып</div>
+                    </div>
+                </div>
+                <button class="profile-logout-btn" id="profileLogoutBtn">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M13 14L17 10L13 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M17 10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M7 17H4C3.44772 17 3 16.5523 3 16V4C3 3.44772 3.44772 3 4 3H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Шығу
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 420px;
+            width: 90%;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .profile-modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 32px 24px;
+            text-align: center;
+            color: white;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 36px;
+            font-weight: 800;
+            border: 3px solid rgba(255,255,255,0.5);
+        }
+        .profile-modal-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .profile-modal-role { font-size: 13px; opacity: 0.8; }
+        .profile-modal-body { padding: 24px; }
+        .profile-info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .profile-info-icon {
+            width: 36px;
+            height: 36px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6366f1;
+        }
+        .profile-info-text { flex: 1; }
+        .profile-info-label { font-size: 12px; color: #94a3b8; }
+        .profile-info-value { font-size: 15px; font-weight: 600; color: #1e293b; }
+        .profile-logout-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 16px;
+            background: #fef2f2;
+            border: none;
+            border-radius: 14px;
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .profile-logout-btn:hover { background: #fee2e2; }
+    </style>
+
+    <script>
+        const SECTION_ID = 5;
+        const CLASS_LEVEL = 7;
+
+        // Бұл бөлімдегі тақырыптар (globalId - database.test_results.topic_id сәйкес)
+        const topics = {
+            1: { title: 'Проблеманы қою', globalId: 19 },
+            2: { title: 'Алгоритмді әзірлеу', globalId: 20 },
+            3: { title: 'Алгоритмді программалау', globalId: 21 },
+            4: { title: 'Программаны тестілеу', globalId: 22 },
+        };
+        const TOTAL_TOPICS = Object.keys(topics).length;
+
+        function getColorByScore(percent) {
+            if (percent === 0) return '#3b82f6';
+            if (percent >= 70) return '#10b981';
+            if (percent >= 40) return '#f59e0b';
+            return '#ef4444';
+        }
+
+        async function loadProgress() {
+            try {
+                const res = await fetch(`/api/user-progress?class_level=${CLASS_LEVEL}`);
+                const data = await res.json();
+                const progress = data.progress ? data.progress[SECTION_ID] : null;
+                if (progress && progress.topics) {
+                    const map = {};
+                    progress.topics.forEach(t => { map[t.topic_id] = t.percentage; });
+                    return {
+                        map: map,
+                        completedTopics: progress.completed_topics || 0,
+                        totalTopics: TOTAL_TOPICS
+                    };
+                }
+                return { map: {}, completedTopics: 0, totalTopics: TOTAL_TOPICS };
+            } catch(e) {
+                return { map: {}, completedTopics: 0, totalTopics: TOTAL_TOPICS };
+            }
+        }
+
+        async function renderTopics() {
+            const { map: completed, completedTopics, totalTopics } = await loadProgress();
+            let totalPercent = 0;
+            let totalCompletedCount = 0;
+            const grid = document.getElementById('topicsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            for (const [id, topic] of Object.entries(topics)) {
+                const percent = completed[topic.globalId] || 0;
+                totalPercent += percent;
+                const hasTest = percent > 0;
+                if (hasTest) totalCompletedCount++;
+                const color = getColorByScore(percent);
+
+                let buttonHtml = '';
+                if (hasTest) {
+                    buttonHtml = '<div class="score-badge" style="background: ' + color + '; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold;">📊 Нәтиже: ' + percent + '%</div>';
+                } else {
+                    buttonHtml = '<button class="topic-btn start-btn" data-id="' + topic.globalId + '" data-title="' + topic.title + '" style="background: ' + color + '; color: white; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: bold;">▶ Бастау</button>';
+                }
+
+                const card = document.createElement('div');
+                card.className = 'topic-card';
+                card.style.borderLeft = '4px solid ' + color;
+                card.style.background = hasTest ? 'linear-gradient(135deg, ' + color + ' 0%, ' + color + 'cc 100%)' : 'linear-gradient(135deg, ' + color + '08 0%, rgba(255, 255, 255, 0.9) 100%)';
+                card.innerHTML = '<div class="topic-number" style="background: ' + color + ';">' + id + '</div><div class="topic-content"><div class="topic-header"><h3 class="topic-title" style="' + (hasTest ? 'color: white;' : '') + '">' + topic.title + '</h3><div class="topic-status" style="color: ' + color + '; background: ' + color + '20; ' + (hasTest ? 'color: white; background: rgba(255,255,255,0.2);' : '') + '">' + (hasTest ? (percent >= 70 ? '✅ Аяқталды (' + percent + '%)' : '📊 Тест аяқталды (' + percent + '%)') : '🚀 Бастау') + '</div></div><p style="' + (hasTest ? 'color: rgba(255,255,255,0.9);' : '') + '">10 тест сұрақтары • 30 минут</p><div class="topic-footer">' + buttonHtml + '</div></div>';
+                grid.appendChild(card);
+            }
+
+            // Орташа пайыз - барлық тақырыптар бойынша (өтілмегендер 0)
+            const avg = totalTopics > 0 ? Math.round(totalPercent / totalTopics) : 0;
+            const allTopicsCompleted = totalCompletedCount >= totalTopics;
+            const avgColor = allTopicsCompleted ? '#10b981' : getColorByScore(avg);
+
+            const totalProgressEl = document.getElementById('totalProgress');
+            const totalProgressFillEl = document.getElementById('totalProgressFill');
+            const progressTextEl = document.getElementById('progressText');
+
+            if (totalProgressEl) totalProgressEl.textContent = allTopicsCompleted ? '100%' : avg + '%';
+            if (totalProgressEl) totalProgressEl.style.color = avgColor;
+            if (totalProgressFillEl) totalProgressFillEl.style.width = allTopicsCompleted ? '100%' : avg + '%';
+            if (totalProgressFillEl) totalProgressFillEl.style.background = allTopicsCompleted ? 'linear-gradient(90deg, #10b981, #10b981)' : 'linear-gradient(90deg, ' + avgColor + ', ' + avgColor + '80)';
+            if (progressTextEl) progressTextEl.textContent = allTopicsCompleted ? '✅ Бөлім толық аяқталды! (' + totalCompletedCount + '/' + totalTopics + ')' : totalCompletedCount + '/' + totalTopics + ' тақырып аяқталды';
+
+            document.querySelectorAll('.topic-btn').forEach(btn => {
+                btn.onclick = function() {
+                    var topicId = this.getAttribute('data-id');
+                    var topicTitle = this.getAttribute('data-title');
+                    sessionStorage.setItem('topicNumber', topicId);
+                    sessionStorage.setItem('topicTitle', topicTitle);
+                    sessionStorage.setItem('sectionId', SECTION_ID);
+                    sessionStorage.setItem('classLevel', CLASS_LEVEL);
+                    window.location.href = '/test';
+                };
+            });
+        }
+
+        // Профиль модальды терезесі
+        const profileModal = document.getElementById('profileModal');
+        const showProfileBtn = document.getElementById('showProfileBtn');
+
+        function closeProfileModal() {
+            if (profileModal) profileModal.classList.remove('active');
+        }
+
+        function openProfileModal() {
+            if (profileModal) profileModal.classList.add('active');
+        }
+
+        if (showProfileBtn) {
+            showProfileBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openProfileModal();
+            });
+        }
+
+        window.addEventListener('click', function(e) {
+            if (e.target === profileModal) closeProfileModal();
+        });
+
+        const profileLogoutBtn = document.getElementById('profileLogoutBtn');
+        if (profileLogoutBtn) {
+            profileLogoutBtn.addEventListener('click', function() {
+                if (confirm('Шығуға сенімдісіз бе?')) {
+                    window.location.href = '/logout';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTopics);
+    </script>
+    <script>
+        (function() {
+            const navbar = document.querySelector('.navbar');
+            const navRight = document.querySelector('.nav-right');
+            if (!navbar || !navRight) return;
+            const btn = document.createElement('button');
+            btn.className = 'hamburger';
+            btn.setAttribute('aria-label', 'Меню');
+            btn.innerHTML = '<span></span><span></span><span></span>';
+            navbar.insertBefore(btn, navRight);
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('open');
+                navRight.classList.toggle('open');
+            });
+            document.addEventListener('click', function(e) {
+                if (!btn.contains(e.target) && !navRight.contains(e.target)) {
+                    btn.classList.remove('open');
+                    navRight.classList.remove('open');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

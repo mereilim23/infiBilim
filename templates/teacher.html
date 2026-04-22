@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мұғалім панелі — InfoBilim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #222535;
+            --border: #2e3147;
+            --accent: #6c63ff;
+            --accent2: #ff6b6b;
+            --green: #43e97b;
+            --text: #e8eaf0;
+            --muted: #7b7f9e;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo-dot { color: var(--accent); }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .teacher-badge {
+            background: linear-gradient(135deg, #6c63ff22, #6c63ff44);
+            border: 1px solid #6c63ff66;
+            color: #a89dff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .user-name-text { font-size: 14px; font-weight: 500; }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+        /* ── Layout ── */
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text) 0%, #a89dff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .page-sub { color: var(--muted); font-size: 15px; }
+
+        /* ── Stats row ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.purple { background: #6c63ff22; }
+        .stat-icon.green  { background: #43e97b22; }
+        .stat-icon.red    { background: #ff6b6b22; }
+
+        .stat-num {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .stat-label { color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+        /* ── Section header ── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* ── Create class form ── */
+        .create-card {
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 40px;
+            transition: border-color .2s;
+        }
+
+        .create-card:hover { border-color: var(--accent); }
+
+        .create-title {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .create-form {
+            display: flex;
+            gap: 12px;
+        }
+
+        .create-input {
+            flex: 1;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .create-input:focus { border-color: var(--accent); }
+        .create-input::placeholder { color: var(--muted); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity .2s, transform .1s;
+            white-space: nowrap;
+        }
+
+        .btn-primary:hover { opacity: .9; }
+        .btn-primary:active { transform: scale(.97); }
+
+        /* ── Classes grid ── */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .class-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-decoration: none;
+            color: var(--text);
+            display: block;
+            transition: border-color .2s, transform .2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .class-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #a78bfa);
+            opacity: 0;
+            transition: opacity .2s;
+        }
+
+        .class-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .class-card:hover::before { opacity: 1; }
+
+        .class-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .class-name {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+        }
+
+        .class-menu-icon { color: var(--muted); font-size: 18px; }
+
+        .class-code-block {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .code-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+        .code-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: var(--accent);
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 6px;
+            transition: color .2s, background .2s;
+        }
+
+        .copy-btn:hover { color: var(--accent); background: #6c63ff11; }
+
+        .class-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .students-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .view-link {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+            font-family: 'Sora', sans-serif;
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-text { font-size: 15px; }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--surface2);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideUp .3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 640px) {
+            .stats-row { grid-template-columns: 1fr; }
+            .create-form { flex-direction: column; }
+            .page-title { font-size: 24px; }
+        }
+
+        /* ===== АДАПТАЦИЯ teacher.html ===== */
+        .hamburger-t {
+            display: none; flex-direction: column; gap: 5px; cursor: pointer;
+            padding: 6px; background: rgba(108,99,255,0.15); border: none; border-radius: 8px;
+        }
+        .hamburger-t span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+        .hamburger-t.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-t.open span:nth-child(2) { opacity: 0; }
+        .hamburger-t.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        @media (min-width: 1024px) and (max-width: 1279px) {
+            .classes-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
+            .classes-grid { grid-template-columns: repeat(2, 1fr); }
+            header { padding: 0 20px; }
+            main { padding: 28px 20px; }
+            .page-title { font-size: 26px; }
+        }
+        @media (max-width: 767px) {
+            .hamburger-t { display: flex; }
+            .teacher-badge { display: none; }
+            .user-name-text { display: none; }
+            header { padding: 0 16px; }
+            .header-right { gap: 12px; }
+            main { padding: 20px 16px; }
+            .page-title { font-size: 22px; }
+            .page-sub { font-size: 13px; }
+            .stats-row { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+            .stat-card { padding: 16px; }
+            .stat-num { font-size: 22px; }
+            .stat-icon { width: 40px; height: 40px; font-size: 18px; }
+            .create-card { padding: 20px 16px; }
+            .create-form { flex-direction: column; gap: 10px; }
+            .create-input { font-size: 14px; }
+            .btn-primary { width: 100%; justify-content: center; }
+            .classes-grid { grid-template-columns: 1fr; gap: 16px; }
+            .class-card { padding: 20px 16px; }
+            .class-name { font-size: 15px; }
+            .code-value { font-size: 16px; letter-spacing: 2px; }
+        }
+        @media (max-width: 380px) {
+            .page-title { font-size: 18px; }
+            .stats-row { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/teacher" class="logo">Infobilim<span class="logo-dot"></span></a>
+    <div class="header-right">
+        <button class="hamburger-t" id="hamT"><span></span><span></span><span></span></button>
+        <span class="teacher-badge"> Мұғалім</span>
+        <div class="user-info">
+            <div class="avatar">{{ user_name[0] | upper }}</div>
+            <span class="user-name-text">{{ user_name }}</span>
+        </div>
+        <a href="/logout" class="logout-btn">Шығу</a>
+    </div>
+</header>
+
+<main>
+    <div class="page-header">
+        <h1 class="page-title"> {{ user_name }}! </h1>
+        <p class="page-sub">Сыныптарыңызды басқарыңыз және оқушылардың прогресін бақылаңыз</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon purple">🏫</div>
+            <div>
+                <div class="stat-num">{{ classes | length }}</div>
+                <div class="stat-label">Сынып</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green">👥</div>
+            <div>
+                <div class="stat-num">{{ classes | sum(attribute='student_count') }}</div>
+                <div class="stat-label">Барлық оқушы</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Create class -->
+    <div class="create-card">
+        <div class="create-title">➕ Жаңа сынып құру</div>
+        <form class="create-form" method="POST" action="/teacher/create-class">
+            <input class="create-input" type="text" name="class_name" placeholder="Мысалы: 8А сынып, Математика тобы..." required>
+            <button class="btn-primary" type="submit">Сынып құру</button>
+        </form>
+    </div>
+
+    <!-- Classes list -->
+    <div class="section-header">
+        <h2 class="section-title">Менің сыныптарым</h2>
+    </div>
+
+    {% if classes %}
+    <div class="classes-grid">
+        {% for cls in classes %}
+        <a href="/teacher/class/{{ cls.id }}" class="class-card">
+            <div class="class-card-header">
+                <div class="class-name">{{ cls.name }}</div>
+            </div>
+            <div class="class-code-block">
+                <div>
+                    <div class="code-label">Шақыру коды</div>
+                    <div class="code-value">{{ cls.invite_code }}</div>
+                </div>
+                <button class="copy-btn" onclick="copyCode(event, '{{ cls.invite_code }}')" title="Көшіру"></button>
+            </div>
+            <div class="class-footer">
+                <span class="students-count">👤 {{ cls.student_count }} оқушы</span>
+                <span class="view-link">Толығырақ →</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🏫</div>
+        <div class="empty-text">Әзірше сынып жоқ. Жоғарыдан жаңа сынып құрыңыз!</div>
+    </div>
+    {% endif %}
+</main>
+
+<script>
+function copyCode(e, code) {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(code).then(() => {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = `✅ Код көшірілді: ${code}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    });
+}
+</script>
+    <script>
+        const hamT = document.getElementById('hamT');
+        if(hamT){ hamT.addEventListener('click', function(){ this.classList.toggle('open'); }); }
+    </script>
+</body>
+</html>

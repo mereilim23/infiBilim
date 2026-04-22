@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ student.name }} - Прогресс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #222535;
+            --border: #2e3147;
+            --accent: #6c63ff;
+            --green: #43e97b;
+            --yellow: #ffd166;
+            --red: #ff6b6b;
+            --text: #e8eaf0;
+            --muted: #7b7f9e;
+            --radius: 16px;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); text-decoration: none; }
+        .logo span { color: var(--accent); }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+
+        .back-btn {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all .2s;
+        }
+        .back-btn:hover { color: var(--text); border-color: var(--accent); }
+
+        main { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+
+        /* Student hero card */
+        .student-hero {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .student-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .student-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .student-email { color: var(--muted); font-size: 14px; }
+
+        .hero-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .hero-stat-num {
+            font-family: 'Sora', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .hero-stat-num.green { color: var(--green); }
+        .hero-stat-num.yellow { color: var(--yellow); }
+
+        .hero-stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+        /* Section title */
+        .sections-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* Progress grid */
+        .progress-grid { display: grid; gap: 20px; }
+
+        .section-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: border-color .2s;
+        }
+
+        .section-card:hover { border-color: #3e4260; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .section-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .badge-completed { background: #43e97b22; color: var(--green); border: 1px solid #43e97b44; }
+        .badge-progress  { background: #ffd16622; color: var(--yellow); border: 1px solid #ffd16644; }
+        .badge-low       { background: #ff6b6b22; color: var(--red);    border: 1px solid #ff6b6b44; }
+        .badge-empty     { background: #7b7f9e22; color: var(--muted);  border: 1px solid #7b7f9e44; }
+
+        /* Progress bar */
+        .section-progress-bar {
+            height: 8px;
+            background: var(--surface2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .section-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .fill-high   { background: linear-gradient(90deg, var(--green), #06d6a0); }
+        .fill-mid    { background: linear-gradient(90deg, var(--yellow), #f4a261); }
+        .fill-low    { background: linear-gradient(90deg, var(--red), #f77f00); }
+        .fill-empty  { background: var(--border); }
+
+        /* Topic list */
+        .topic-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .topic-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: var(--surface2);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .topic-left { display: flex; align-items: center; gap: 12px; }
+
+        .topic-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .topic-num.passed { background: #43e97b22; color: var(--green); }
+        .topic-num.failed { background: #ff6b6b22; color: var(--red); }
+
+        .topic-name { font-size: 14px; font-weight: 500; }
+
+        .topic-right { display: flex; align-items: center; gap: 12px; }
+
+        .topic-score {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .topic-score.passed { color: var(--green); }
+        .topic-score.failed { color: var(--red); }
+
+        .topic-fraction { font-size: 12px; color: var(--muted); }
+
+        .topic-check { font-size: 16px; }
+
+        /* Topic names map */
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .no-data-icon { font-size: 48px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/teacher" class="logo">ИнфоБілім<span>.</span></a>
+    <div class="header-right">
+        <a href="/teacher/class/{{ class.id }}/rating" class="back-btn">← Рейтингке оралу</a>
+    </div>
+</header>
+
+<main>
+    {% set total_sections = progress | length %}
+    {% set completed_sections = progress.values() | selectattr('is_completed') | list | length %}
+    {% set all_avgs = progress.values() | map(attribute='avg_percentage') | list %}
+    {% set overall_avg = (all_avgs | sum / all_avgs | length) | int if all_avgs else 0 %}
+
+    <!-- Student hero -->
+    <div class="student-hero">
+        <div class="student-profile">
+            <div class="student-avatar">{{ student.name[0] | upper }}</div>
+            <div>
+                <div class="student-name">{{ student.name }}</div>
+                <div class="student-email">{{ student.email }}</div>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num">{{ overall_avg }}%</div>
+                <div class="hero-stat-label">Жалпы орташа</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num green">{{ completed_sections }}</div>
+                <div class="hero-stat-label">Аяқталған бөлім</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num yellow">{{ total_sections }}</div>
+                <div class="hero-stat-label">Барлық бөлім</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section progress -->
+    <div class="sections-title">📊 Бөлімдер бойынша нәтиже</div>
+
+    {% set section_names = {
+        1: 'Компьютерлік жад және оның өлшем бірліктері',
+        2: 'Желі және қауіпсіздік',
+        3: 'Электрондық кесте арқылы есептер шығару',
+        4: 'Python тіліндегі алгоритмдерді программалау'
+    } %}
+
+    {% set topic_names = {
+        1: 'Компьютер жадының негіздері',
+        2: 'Ақпарат өлшем бірліктері',
+        3: 'Жад түрлері: RAM және ROM',
+        4: 'Сыртқы жады құрылғылары',
+        5: 'Файлдық жүйе'
+    } %}
+
+    {% if progress %}
+    <div class="progress-grid">
+        {% for section_id, section in progress.items() %}
+        {% set avg = section.avg_percentage %}
+
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-name">
+                    {{ section_names.get(section_id, 'Бөлім ' ~ section_id) }}
+                </div>
+                {% if section.is_completed %}
+                    <span class="section-badge badge-completed">✅ Аяқталды · {{ avg }}%</span>
+                {% elif avg >= 40 %}
+                    <span class="section-badge badge-progress">📚 Үдерісте · {{ avg }}%</span>
+                {% elif avg > 0 %}
+                    <span class="section-badge badge-low">⚠️ Баяу · {{ avg }}%</span>
+                {% else %}
+                    <span class="section-badge badge-empty">— Басталмаған</span>
+                {% endif %}
+            </div>
+
+            <!-- Progress bar -->
+            <div class="section-progress-bar">
+                <div class="section-progress-fill
+                    {% if avg >= 70 %}fill-high{% elif avg >= 40 %}fill-mid{% elif avg > 0 %}fill-low{% else %}fill-empty{% endif %}"
+                    style="width: {{ avg }}%">
+                </div>
+            </div>
+
+            <!-- Topics -->
+            <div class="topic-list">
+                {% for topic in section.topics %}
+                <div class="topic-item">
+                    <div class="topic-left">
+                        <div class="topic-num {% if topic.passed %}passed{% else %}failed{% endif %}">
+                            {{ loop.index }}
+                        </div>
+                        <div class="topic-name">
+                            {{ topic_names.get(topic.topic_id, 'Тақырып ' ~ topic.topic_id) }}
+                        </div>
+                    </div>
+                    <div class="topic-right">
+                        <span class="topic-fraction">{{ topic.score }}/{{ topic.total }}</span>
+                        <span class="topic-score {% if topic.passed %}passed{% else %}failed{% endif %}">
+                            {{ topic.percentage }}%
+                        </span>
+                        <span class="topic-check">{% if topic.passed %}✅{% else %}❌{% endif %}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="no-data">
+        <div class="no-data-icon">📊</div>
+        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Тест нәтижелері жоқ</div>
+        <div style="font-size: 14px;">Бұл оқушы әлі ешбір тест тапсырмаған</div>
+    </div>
+    {% endif %}
+</main>
+
+</body>
+</html>

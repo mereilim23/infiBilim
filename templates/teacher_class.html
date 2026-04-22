@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ class.name }} — InfoBilim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #222535;
+            --border: #2e3147;
+            --accent: #6c63ff;
+            --green: #43e97b;
+            --yellow: #ffd166;
+            --red: #ff6b6b;
+            --text: #e8eaf0;
+            --muted: #7b7f9e;
+            --radius: 16px;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); text-decoration: none; }
+        .logo span { color: var(--accent); }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all .2s;
+        }
+        .back-btn:hover { color: var(--text); border-color: var(--accent); }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        main { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+
+        /* Class header */
+        .class-header {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .class-title { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+        .class-meta { color: var(--muted); font-size: 14px; }
+
+        .invite-block {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .invite-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+
+        .invite-code {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        .invite-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+        /* Action buttons */
+        .action-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all .2s;
+        }
+
+        .action-btn.primary { background: linear-gradient(135deg, var(--accent), #a78bfa); color: white; }
+        .action-btn.secondary { background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; }
+        .action-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        /* Summary cards */
+        .summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+
+        .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .summary-num { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; }
+        .summary-label { color: var(--muted); font-size: 12px; margin-top: 4px; }
+        .summary-num.green { color: var(--green); }
+        .summary-num.yellow { color: var(--yellow); }
+        .summary-num.purple { color: #a78bfa; }
+
+        /* Students table */
+        .table-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .table-header-row {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .table-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 17px; }
+
+        .refresh-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all .2s;
+        }
+
+        .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th {
+            background: var(--surface2);
+            padding: 12px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        .student-cell { display: flex; align-items: center; gap: 12px; }
+
+        .student-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c63ff, #a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .student-name { font-weight: 500; font-size: 14px; }
+        .student-email { font-size: 12px; color: var(--muted); }
+        .joined-date { font-size: 12px; color: var(--muted); }
+
+        .badge {
+            display: inline-flex;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-green { background: #43e97b22; color: var(--green); border: 1px solid #43e97b44; }
+
+        .empty-state { padding: 60px 20px; text-align: center; color: var(--muted); }
+        .empty-icon { font-size: 44px; margin-bottom: 12px; }
+
+        .code-share {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 20px;
+            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .code-big { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 4px; color: var(--accent); }
+
+        .copy-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+
+        .copy-btn:hover { opacity: .85; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--surface2);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideUp .3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .summary-row { grid-template-columns: repeat(2, 1fr); }
+            .class-header { flex-direction: column; align-items: flex-start; }
+            th, td { padding: 12px; }
+            td:nth-child(3), th:nth-child(3) { display: none; }
+        }
+
+        /* ===== АДАПТАЦИЯ (dark teacher pages) ===== */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            header { padding: 0 20px; }
+            main { padding: 28px 20px; }
+        }
+        @media (max-width: 767px) {
+            header { padding: 0 16px; height: auto; min-height: 56px; flex-wrap: wrap; gap: 8px; padding: 10px 16px; }
+            .back-btn { font-size: 12px; padding: 6px 10px; }
+            .back-btn span { display: none; }
+            main { padding: 20px 16px; }
+            .page-title { font-size: 20px; }
+            .page-sub { font-size: 12px; }
+            table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            thead, tbody, tr { min-width: 500px; }
+            td, th { padding: 10px 12px; font-size: 12px; }
+            .student-name { font-size: 13px; }
+            .student-avatar { width: 30px; height: 30px; font-size: 12px; }
+            .prog-wrap { min-width: 90px; }
+            .badge { font-size: 11px; padding: 3px 8px; }
+            .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+            .stat-value, .stat-val { font-size: 22px; }
+            .stat-card { padding: 14px; }
+            .rating-card-header { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; }
+            .page-title { font-size: 17px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/teacher" class="logo">ИнфоБілім<span>.</span></a>
+    <div class="header-right">
+        <a href="/teacher" class="back-btn">← Артқа</a>
+        <div class="avatar">{{ user_name[0] | upper }}</div>
+    </div>
+</header>
+
+<main>
+    <div class="class-header">
+        <div>
+            <h1 class="class-title">{{ class.name }}</h1>
+            <div class="class-meta">
+                👥 <span id="studentCount">{{ students|length }}</span> оқушы •
+                Құрылған: {{ class.created_at[:10] if class.created_at else '—' }}
+            </div>
+        </div>
+        <div class="invite-block">
+            <div class="invite-label">Шақыру коды</div>
+            <div class="invite-code" onclick="copyCode('{{ class.invite_code }}')">{{ class.invite_code }}</div>
+            <div class="invite-hint">Көшіру үшін басыңыз</div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a href="/teacher/class/{{ class.id }}/assignments" class="action-btn primary"> Тапсырмалар</a>
+        <a href="/teacher/class/{{ class.id }}/section-rating/1" class="action-btn secondary"> Рейтинг</a>
+    </div>
+
+    <div class="summary-row">
+        <div class="summary-card">
+            <div class="summary-num purple">{{ students|length }}</div>
+            <div class="summary-label">Барлық оқушы</div>
+        </div>
+        <div class="summary-card">
+            {% set active = students|selectattr('total_tests', 'defined')|list|length %}
+            <div class="summary-num green">{{ active }}</div>
+            <div class="summary-label">Белсенді</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-num yellow">—</div>
+            <div class="summary-label">Орташа прогресс</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-num green">{{ students|selectattr('id', 'defined')|list|length }}</div>
+            <div class="summary-label">Қосылған</div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-header-row">
+            <div class="table-title">Оқушылар тізімі</div>
+            <button class="refresh-btn" onclick="refreshStudents()">🔄 Жаңарту</button>
+        </div>
+
+        {% if students and students|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Оқушы</th>
+                    <th>Электрондық пошта</th>
+                    <th>Қосылған уақыты</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody id="studentsTableBody">
+                {% for s in students %}
+                <tr>
+                    <td>
+                        <div class="student-cell">
+                            <div class="student-avatar">{{ s.name[0] | upper }}</div>
+                            <div>
+                                <div class="student-name">{{ s.name }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="student-email">{{ s.email }}</td>
+                    <td class="joined-date">{{ s.joined_at[:16] if s.joined_at else '—' }}</td>
+                    <td><span class="badge badge-green"> Қосылды</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <div>Әзірше оқушы жоқ.</div>
+            <div style="margin-top: 8px; font-size: 13px;">Оқушыларға мына кодты беріңіз:</div>
+            <div class="code-share">
+                <span class="code-big">{{ class.invite_code }}</span>
+                <button class="copy-btn" onclick="copyCode('{{ class.invite_code }}')">Көшіру</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+
+<script>
+function copyCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        showToast(`✅ Код көшірілді: ${code}`);
+    });
+}
+
+function showToast(message) {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+}
+
+async function refreshStudents() {
+    showToast('🔄 Жаңартылуда...');
+    try {
+        const response = await fetch(`/teacher/class/{{ class.id }}/students-data`);
+        const data = await response.json();
+        if (data.students) {
+            updateStudentsTable(data.students);
+            document.getElementById('studentCount').textContent = data.students.length;
+            showToast(`✅ ${data.students.length} оқушы жаңартылды`);
+        }
+    } catch (error) {
+        showToast('❌ Қате орын алды');
+    }
+}
+
+function updateStudentsTable(students) {
+    const tbody = document.getElementById('studentsTableBody');
+    if (!tbody) return;
+    if (students.length === 0) { location.reload(); return; }
+    tbody.innerHTML = '';
+    students.forEach(s => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>
+                <div class="student-cell">
+                    <div class="student-avatar">${s.name[0].toUpperCase()}</div>
+                    <div><div class="student-name">${escapeHtml(s.name)}</div></div>
+                </div>
+            </td>
+            <td class="student-email">${escapeHtml(s.email)}</td>
+            <td class="joined-date">${s.joined_at || '—'}</td>
+            <td><span class="badge badge-green">✅ Қосылды</span></td>
+        `;
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+setInterval(refreshStudents, 10000);
+</script>
+</body>
+</html>

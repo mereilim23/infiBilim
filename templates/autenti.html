@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кіру - ИнфоБілім</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border: rgba(99, 102, 241, 0.25);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 28px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 36px;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border-left: 4px solid #ef4444;
+            color: #b91c1c;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .auth-form { display: flex; flex-direction: column; gap: 20px; }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #fff;
+            color: var(--text-dark);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .form-input::placeholder { color: #94a3b8; }
+
+        .password-wrapper { position: relative; }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-password:hover { color: var(--primary); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .auth-switch {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .auth-switch a:hover { color: var(--secondary); }
+
+        @media (max-width: 480px) {
+            .card { padding: 32px 24px; }
+            .auth-title { font-size: 22px; }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .card { max-width: 480px; padding: 40px 36px; }
+        }
+        @media (max-width: 767px) {
+            .card { padding: 28px 20px; border-radius: 20px; }
+            .auth-title { font-size: 22px; }
+            .form-input { padding: 12px 14px; font-size: 14px; }
+            .submit-btn { padding: 13px; }
+        }
+        @media (max-width: 380px) {
+            .card { padding: 24px 16px; }
+            .auth-title { font-size: 19px; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                <path d="M8 3L4 7L8 11" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M16 3L20 7L16 11" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M14 3L10 11" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
+                <defs>
+                    <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#6366f1"/>
+                        <stop offset="100%" style="stop-color:#8b5cf6"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span class="logo-text">ИнфоБілім</span>
+        </div>
+
+        <h1 class="auth-title">Қош келдіңіз!</h1>
+        <p class="auth-subtitle">Жүйеге кіру үшін деректеріңізді енгізіңіз</p>
+
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <form class="auth-form" method="POST" action="/login">
+            <div class="form-group">
+                <label for="username" class="form-label">Логин</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-input"
+                    placeholder="логин"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Құпия сөз</label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-input"
+                        placeholder="••••••••"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                        <svg class="eye-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 4C5 4 2 10 2 10C2 10 5 16 10 16C15 16 18 10 18 10C18 10 15 4 10 4Z" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Кіру</button>
+
+            <p class="auth-switch">
+                Аккаунтыңыз жоқ па? <a href="/register">Тіркелу</a>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.parentElement.querySelector('.eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (icon) icon.style.opacity = '0.4';
+            } else {
+                input.type = 'password';
+                if (icon) icon.style.opacity = '1';
+            }
+        }
+    </script>
+</body>
+</html>

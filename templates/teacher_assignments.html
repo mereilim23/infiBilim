@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ class.name }} - Тапсырмалар</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #222535;
+            --border: #2e3147;
+            --accent: #6c63ff;
+            --green: #43e97b;
+            --text: #e8eaf0;
+            --muted: #7b7f9e;
+            --radius: 16px;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); }
+        .logo span { color: var(--accent); }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .back-btn {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+        .back-btn:hover { color: var(--text); border-color: var(--accent); }
+
+        main { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+        .page-header {
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .create-card {
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .create-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .create-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-input, .form-textarea {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .assignments-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .assignment-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+
+        .assignment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .assignment-title {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .assignment-date {
+            font-size: 12px;
+            color: var(--muted);
+            background: var(--surface2);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .assignment-desc {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-icon { font-size: 48px; margin-bottom: 16px; }
+
+        /* ===== АДАПТАЦИЯ (dark teacher pages) ===== */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            header { padding: 0 20px; }
+            main { padding: 28px 20px; }
+        }
+        @media (max-width: 767px) {
+            header { padding: 0 16px; height: auto; min-height: 56px; flex-wrap: wrap; gap: 8px; padding: 10px 16px; }
+            .back-btn { font-size: 12px; padding: 6px 10px; }
+            .back-btn span { display: none; }
+            main { padding: 20px 16px; }
+            .page-title { font-size: 20px; }
+            .page-sub { font-size: 12px; }
+            table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            thead, tbody, tr { min-width: 500px; }
+            td, th { padding: 10px 12px; font-size: 12px; }
+            .student-name { font-size: 13px; }
+            .student-avatar { width: 30px; height: 30px; font-size: 12px; }
+            .prog-wrap { min-width: 90px; }
+            .badge { font-size: 11px; padding: 3px 8px; }
+            .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+            .stat-value, .stat-val { font-size: 22px; }
+            .stat-card { padding: 14px; }
+            .rating-card-header { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; }
+            .page-title { font-size: 17px; }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/teacher" class="logo">ИнфоБілім<span>.</span></a>
+        <div class="header-right">
+            <a href="/teacher/class/{{ class.id }}" class="back-btn">← Сыныпқа оралу</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">{{ class.name }} — Тапсырмалар</h1>
+        </div>
+
+        <!-- Create assignment form -->
+        <div class="create-card">
+            <div class="create-title">➕ Жаңа тапсырма қосу</div>
+            <form class="create-form" method="POST" action="/teacher/class/{{ class.id }}/create-assignment">
+                <input class="form-input" type="text" name="title" placeholder="Тапсырма атауы" required>
+                <textarea class="form-textarea" name="description" rows="4" placeholder="Тапсырма сипаттамасы" required></textarea>
+                <input class="form-input" type="date" name="due_date" placeholder="Соңғы мерзім">
+                <button class="btn-primary" type="submit">Тапсырма қосу</button>
+            </form>
+        </div>
+
+        <!-- Assignments list -->
+        {% if assignments %}
+        <div class="assignments-grid">
+            {% for a in assignments %}
+            <div class="assignment-card">
+                <div class="assignment-header">
+                    <div class="assignment-title">{{ a.title }}</div>
+                    <span class="assignment-date">{{ a.due_date[:10] if a.due_date else 'Мерзімсіз' }}</span>
+                </div>
+                <div class="assignment-desc">{{ a.description }}</div>
+                <div style="font-size: 12px; color: var(--muted);">
+                    Құрылған: {{ a.created_at[:16] if a.created_at else '' }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📚</div>
+            <div>Әзірше тапсырмалар жоқ</div>
+            <p style="margin-top: 8px; font-size: 13px;">Жоғарыдағы форма арқылы жаңа тапсырма қосыңыз</p>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>
