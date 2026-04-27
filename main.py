@@ -173,13 +173,13 @@ def teacher_dashboard(request: Request):
 
 
 @app.post("/teacher/create-class", response_class=HTMLResponse)
-async def create_class(request: Request, class_name: str = Form(...)):
+async def create_class(request: Request, class_name: str = Form(...), class_level: int = Form(default=7)):
     user_role = request.cookies.get("user_role", "")
     user_id = request.cookies.get("user_id", "")
     if user_role != "teacher" or not user_id:
         return RedirectResponse(url="/login", status_code=303)
 
-    db.create_class(class_name, int(user_id))
+    db.create_class(class_name, int(user_id), class_level)
     return RedirectResponse(url="/teacher", status_code=303)
 
 
@@ -476,7 +476,10 @@ def section_rating(class_id: int, section_id: int, request: Request):
     if not class_ or class_["teacher_id"] != int(user_id):
         return RedirectResponse(url="/teacher", status_code=303)
 
-    if section_id not in [1, 2, 3, 4, 5]:
+    class_level = db.get_class_level(class_id)
+    # Сынып деңгейіне сәйкес рұқсат етілген бөлімдер санын анықтаймыз
+    max_sections = {7: 5, 8: 5, 9: 4}.get(class_level, 5)
+    if section_id not in range(1, max_sections + 1):
         return RedirectResponse(url=f"/teacher/class/{class_id}/rating", status_code=303)
 
     section_data = db.get_section_rating(class_id, section_id)
@@ -484,7 +487,8 @@ def section_rating(class_id: int, section_id: int, request: Request):
     return render_template(request, "teacher_section_rating.html", {
         "class": dict(class_),
         "current_section": section_id,
-        "section_data": section_data
+        "section_data": section_data,
+        "class_level": class_level
     })
 
 
@@ -508,3 +512,44 @@ def read_topic_7_4bolim(request: Request):
 @app.get("/topic_7_5bolim", response_class=HTMLResponse)
 def read_topic_7_5bolim(request: Request):
     return render_template(request, "topic_7_5bolim.html")
+
+# 8-сынып бөлімдерінің маршруттары
+@app.get("/topic_8_1bolim", response_class=HTMLResponse)
+def read_topic_8_1bolim(request: Request):
+    return render_template(request, "topic_8_1bolim.html")
+
+@app.get("/topic_8_2bolim", response_class=HTMLResponse)
+def read_topic_8_2bolim(request: Request):
+    return render_template(request, "topic_8_2bolim.html")
+
+@app.get("/topic_8_3bolim", response_class=HTMLResponse)
+def read_topic_8_3bolim(request: Request):
+    return render_template(request, "topic_8_3bolim.html")
+
+@app.get("/topic_8_4bolim", response_class=HTMLResponse)
+def read_topic_8_4bolim(request: Request):
+    return render_template(request, "topic_8_4bolim.html")
+
+@app.get("/topic_8_5bolim", response_class=HTMLResponse)
+def read_topic_8_5bolim(request: Request):
+    return render_template(request, "topic_8_5bolim.html")
+
+@app.get("/topic_9_1bolim", response_class=HTMLResponse)
+def read_topic_8_1bolim(request: Request):
+    return render_template(request, "topic_9_1bolim.html")
+
+@app.get("/topic_9_2bolim", response_class=HTMLResponse)
+def read_topic_8_2bolim(request: Request):
+    return render_template(request, "topic_9_2bolim.html")
+
+@app.get("/topic_9_3bolim", response_class=HTMLResponse)
+def read_topic_8_3bolim(request: Request):
+    return render_template(request, "topic_9_3bolim.html")
+
+@app.get("/topic_9_4bolim", response_class=HTMLResponse)
+def read_topic_8_4bolim(request: Request):
+    return render_template(request, "topic_9_4bolim.html")
+
+@app.get("/topic_9_5bolim", response_class=HTMLResponse)
+def read_topic_8_5bolim(request: Request):
+    return render_template(request, "topic_9_5bolim.html")

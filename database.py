@@ -31,10 +31,17 @@ class Database:
                 name TEXT NOT NULL,
                 teacher_id INTEGER NOT NULL,
                 invite_code TEXT NOT NULL UNIQUE,
+                class_level INTEGER NOT NULL DEFAULT 7,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (teacher_id) REFERENCES users(id)
             )
         """)
+        # Бұрынғы деректер базасына class_level бағанасын қосу (бар болса қате шықпайды)
+        try:
+            self.cur.execute("ALTER TABLE classes ADD COLUMN class_level INTEGER NOT NULL DEFAULT 7")
+            self.conn.commit()
+        except Exception:
+            pass
 
         self.cur.execute("""
             CREATE TABLE IF NOT EXISTS class_students (
@@ -119,6 +126,15 @@ class Database:
             )
         """)
 
+        self.cur.execute("""
+            CREATE TABLE IF NOT EXISTS user_activity (
+                user_id INTEGER PRIMARY KEY,
+                is_active BOOLEAN DEFAULT 0,
+                last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+
         self.conn.commit()
         print("✅ Tables created/updated")
 
@@ -148,11 +164,11 @@ class Database:
             if not self.cur.fetchone():
                 return code
 
-    def create_class(self, name: str, teacher_id: int) -> dict:
+    def create_class(self, name: str, teacher_id: int, class_level: int = 7) -> dict:
         code = self.generate_invite_code()
         self.cur.execute(
-            "INSERT INTO classes (name, teacher_id, invite_code) VALUES (?, ?, ?)",
-            (name, teacher_id, code)
+            "INSERT INTO classes (name, teacher_id, invite_code, class_level) VALUES (?, ?, ?, ?)",
+            (name, teacher_id, code, class_level)
         )
         self.conn.commit()
         class_id = self.cur.lastrowid
@@ -192,9 +208,33 @@ class Database:
 
     def get_class_students(self, class_id: int):
         self.cur.execute("""
-            SELECT u.id, u.name, u.username AS email, cs.joined_at
+            SELECT u.id, u.name, u.username AS email, u.password,
+                   cs.joined_at,
+                   COALESCE(ua.is_active, 0) AS is_active,
+                   ua.last_seen
             FROM class_students cs
             JOIN users u ON cs.student_id = u.id
+            LEFT JOIN user_activity ua ON ua.user_id = u.id
+            WHERE cs.class_id = ?
+        """, (class_id,))
+        return self.cur.fetchall()
+
+    def set_user_active(self, user_id: int, is_active: bool):
+        self.cur.execute("""
+            INSERT INTO user_activity (user_id, is_active, last_seen)
+            VALUES (?, ?, CURRENT_TIMESTAMP)
+            ON CONFLICT(user_id) DO UPDATE SET
+                is_active = excluded.is_active,
+                last_seen = CURRENT_TIMESTAMP
+        """, (user_id, 1 if is_active else 0))
+        self.conn.commit()
+
+    def get_active_students(self, class_id: int):
+        self.cur.execute("""
+            SELECT u.id, ua.is_active, ua.last_seen
+            FROM class_students cs
+            JOIN users u ON cs.student_id = u.id
+            LEFT JOIN user_activity ua ON ua.user_id = u.id
             WHERE cs.class_id = ?
         """, (class_id,))
         return self.cur.fetchall()
@@ -352,6 +392,19 @@ class Database:
                 3: {"name": "Электрондық кесте арқылы есептер шығару", "topics": 7},
                 4: {"name": "Python тіліндегі алгоритмдерді программалау", "topics": 4},
                 5: {"name": "Практикалық программалау", "topics": 4},
+            },
+            8: {
+                1: {"name": "Компьютер мен желілердің техникалық сипаттамалары", "topics": 5},
+                2: {"name": "Денсаулық және қауіпсіздік", "topics": 2},
+                3: {"name": "Ақпаратты электронды кестелерде өңдеу", "topics": 5},
+                4: {"name": "Python тіліндегі алгоритмдерді программалау", "topics": 7},
+                5: {"name": "Практикалық программалау", "topics": 5},
+            },
+            9: {
+                1: {"name": "Ақпаратпен жұмыс жасау", "topics": 4},
+                2: {"name": "Компьютер таңдаймыз", "topics": 3},
+                3: {"name": "Деректер базасы", "topics": 5},
+                4: {"name": "Python тіліндегі алгоритмдерді программалау", "topics": 8},
             }
         }
         return sections.get(class_level, {}).get(section_id)
@@ -463,6 +516,7 @@ class Database:
                 for sec_id, percentages in sections.items():
                     # ✅ ИСПРАВЛЕНО: делим на общее кол-во тем раздела (5), а не на пройденные
                     sec_info = self.get_section_info(self.get_class_level(class_id), sec_id)
+                    total_in_section = sec_info["topics"] if sec_info else 5
                     section_averages[sec_id] = round(sum(percentages) / total_in_section)
 
                 total_avg = round(sum(section_averages.values()) / len(section_averages)) if section_averages else 0
@@ -497,6 +551,18 @@ class Database:
         return rating_data
 
     def get_class_level(self, class_id: int) -> int:
+        """Деректер базасынан сынып деңгейін алады."""
+        self.cur.execute("SELECT class_level FROM classes WHERE id = ?", (class_id,))
+        row = self.cur.fetchone()
+        if row and row["class_level"]:
+            return int(row["class_level"])
+        # Ескі жазбалар үшін: атауынан анықтаймыз
+        self.cur.execute("SELECT name FROM classes WHERE id = ?", (class_id,))
+        row = self.cur.fetchone()
+        if row:
+            for level in [7, 8, 9]:
+                if str(level) in row["name"]:
+                    return level
         return 7
 
     def get_class_average_stats(self, class_id: int, section_id: int = None):
@@ -619,6 +685,19 @@ class Database:
                 3: {8: 1, 9: 2, 10: 3, 11: 4, 12: 5, 13: 6, 14: 7},
                 4: {15: 1, 16: 2, 17: 3, 18: 4},
                 5: {19: 1, 20: 2, 21: 3, 22: 4},
+            },
+            8: {
+                1: {23: 1, 24: 2, 25: 3, 26: 4, 27: 5},
+                2: {28: 1, 29: 2},
+                3: {30: 1, 31: 2, 32: 3, 33: 4, 34: 5},
+                4: {35: 1, 36: 2, 37: 3, 38: 4 , 39: 5, 40: 6, 41: 7},
+                5: {42: 1, 43: 2, 44: 3, 45: 4 , 46:5 },
+            },
+            9: {
+                1: {47: 1, 48: 2, 49: 3, 50: 4},
+                2: {51: 1, 52: 2, 53: 3},
+                3: {54: 1, 55: 2, 56: 3, 57: 4, 58: 5},
+                4: {59: 1, 60: 2, 61: 3, 62: 4 , 63: 5, 64: 6, 65: 7, 66: 8},
             }
         }
         topic_map = TOPIC_ID_MAP.get(class_level, {}).get(section_id, {})

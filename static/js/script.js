@@ -6,6 +6,20 @@ const courseData = {
         3: { name: 'Электрондық кесте арқылы есептер шығару', url: '/topic_7_3bolim', topics: 7 },
         4: { name: 'Python тіліндегі алгоритмдерді программалау', url: '/topic_7_4bolim', topics: 4 },
         5: { name: 'Практикалық программалау', url: '/topic_7_5bolim', topics: 4 }
+    },
+    8: {
+        1: { name: 'Компьютер мен желілердің техникалық сипаттамалары', url: '/topic_8_1bolim', topics: 5 },
+        2: { name: 'Денсаулық және қауіпсіздік', url: '/topic_8_2bolim', topics: 2 },
+        3: { name: 'Ақпаратты электронды кестелерде өңдеу', url: '/topic_8_3bolim', topics: 5 },
+        4: { name: 'Python тіліндегі алгоритмдерді программалау', url: '/topic_8_4bolim', topics: 7 },
+        5: { name: 'Практикалық программалау', url: '/topic_8_5bolim', topics: 5 }
+    },
+    9: {
+        1: { name: 'Ақпаратпен жұмыс жасау', url: '/topic_9_1bolim', topics: 4 },
+        2: { name: 'Компьютер таңдаймыз', url: '/topic_9_2bolim', topics: 3 },
+        3: { name: 'Деректер базасы', url: '/topic_9_3bolim', topics: 5 },
+        4: { name: 'Python тіліндегі алгоритмдерді программалау', url: '/topic_9_4bolim', topics: 8 },
+
     }
 };
 

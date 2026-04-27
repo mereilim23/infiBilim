@@ -209,10 +209,42 @@
             color: var(--text);
         }
 
-        .create-form {
+        /* ── Level selector ── */
+        .level-select-row {
             display: flex;
-            gap: 12px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
+        .level-btn {
+            flex: 1;
+            padding: 10px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--muted);
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .2s;
+            text-align: center;
+        }
+        .level-btn:hover { border-color: var(--accent); color: var(--text); }
+        .level-btn.active {
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            border-color: transparent;
+            color: white;
+        }
+        .level-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 12px;
+            min-height: 18px;
+            transition: opacity .2s;
+        }
+        .create-form { flex-direction: column; gap: 10px; }
+        .create-form-row { display: flex; gap: 12px; }
+        .create-form-row .create-input { flex: 1; }
 
         .create-input {
             flex: 1;
@@ -480,8 +512,25 @@
     <div class="create-card">
         <div class="create-title">➕ Жаңа сынып құру</div>
         <form class="create-form" method="POST" action="/teacher/create-class">
-            <input class="create-input" type="text" name="class_name" placeholder="Мысалы: 8А сынып, Математика тобы..." required>
-            <button class="btn-primary" type="submit">Сынып құру</button>
+            <input type="hidden" name="class_level" id="classLevelInput" value="7">
+
+            <!-- Сынып деңгейін таңдау -->
+            <div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Сынып деңгейі</div>
+                <div class="level-select-row">
+                    <button type="button" class="level-btn active" data-level="7" onclick="selectLevel(this)">7-сынып</button>
+                    <button type="button" class="level-btn" data-level="8" onclick="selectLevel(this)">8-сынып</button>
+                    <button type="button" class="level-btn" data-level="9" onclick="selectLevel(this)">9-сынып</button>
+                </div>
+                <div class="level-hint" id="levelHint">📚 Бөлімдер: Компьютерлік жад, Желі, Электрондық кесте, Python, Практика</div>
+            </div>
+
+            <!-- Сынып атауы + батырма -->
+            <div class="create-form-row">
+                <input class="create-input" type="text" name="class_name" id="classNameInput"
+                       placeholder="Мысалы: 7А, 7Б..." required>
+                <button class="btn-primary" type="submit">Сынып құру</button>
+            </div>
         </form>
     </div>
 
@@ -519,6 +568,28 @@
     {% endif %}
 </main>
 
+<script>
+// ── Сынып деңгейі таңдаушы ──
+const LEVEL_HINTS = {
+    7: '📚 Бөлімдер: Компьютерлік жад, Желі, Электрондық кесте, Python, Практика',
+    8: '📚 Бөлімдер: Техникалық сипаттамалар, Денсаулық, Электронды кестелер, Python, Практика',
+    9: '📚 Бөлімдер: Ақпаратпен жұмыс, Компьютер таңдаймыз, Деректер базасы, Python'
+};
+const LEVEL_PLACEHOLDERS = {
+    7: 'Мысалы: 7А, 7Б, 7В...',
+    8: 'Мысалы: 8А, 8Б, 8В...',
+    9: 'Мысалы: 9А, 9Б, 9В...'
+};
+
+function selectLevel(btn) {
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const level = btn.dataset.level;
+    document.getElementById('classLevelInput').value = level;
+    document.getElementById('levelHint').textContent = LEVEL_HINTS[level];
+    document.getElementById('classNameInput').placeholder = LEVEL_PLACEHOLDERS[level];
+}
+</script>
 <script>
 function copyCode(e, code) {
     e.preventDefault();

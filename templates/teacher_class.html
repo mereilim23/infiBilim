@@ -216,8 +216,12 @@
         }
 
         .student-name { font-weight: 500; font-size: 14px; }
-        .student-email { font-size: 12px; color: var(--muted); }
+        .student-login { font-size: 12px; color: var(--muted); }
+        .student-password { font-size: 12px; color: #a78bfa; font-family: monospace; margin-top: 2px; }
         .joined-date { font-size: 12px; color: var(--muted); }
+        .online-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--muted); margin-right: 5px; vertical-align: middle; transition: background .4s; }
+        .online-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse-green 1.5s infinite; }
+        @keyframes pulse-green { 0%,100% { opacity:1; box-shadow: 0 0 6px var(--green); } 50% { opacity:.6; box-shadow: 0 0 12px var(--green); } }
 
         .badge {
             display: inline-flex;
@@ -334,6 +338,7 @@
             <h1 class="class-title">{{ class.name }}</h1>
             <div class="class-meta">
                 👥 <span id="studentCount">{{ students|length }}</span> оқушы •
+                {{ class.class_level if class.class_level else 7 }}-сынып бағдарламасы •
                 Құрылған: {{ class.created_at[:10] if class.created_at else '—' }}
             </div>
         </div>
@@ -380,7 +385,7 @@
             <thead>
                 <tr>
                     <th>Оқушы</th>
-                    <th>Электрондық пошта</th>
+                    <th>Логин / Пароль</th>
                     <th>Қосылған уақыты</th>
                     <th>Статус</th>
                 </tr>
@@ -396,9 +401,15 @@
                             </div>
                         </div>
                     </td>
-                    <td class="student-email">{{ s.email }}</td>
+                    <td>
+                        <div class="student-login">{{ s.email }}</div>
+                        <div class="student-password">🔑 {{ s.password }}</div>
+                    </td>
                     <td class="joined-date">{{ s.joined_at[:16] if s.joined_at else '—' }}</td>
-                    <td><span class="badge badge-green"> Қосылды</span></td>
+                    <td>
+                        <span class="online-dot {% if s.is_active %}active{% endif %}" data-id="{{ s.id }}"></span>
+                        {% if s.is_active %}<span style="color:var(--green);font-size:12px;font-weight:600;">Тест тапсыруда</span>{% else %}<span class="badge badge-green">Қосылды</span>{% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -435,17 +446,15 @@ function showToast(message) {
 }
 
 async function refreshStudents() {
-    showToast('🔄 Жаңартылуда...');
     try {
-        const response = await fetch(`/teacher/class/{{ class.id }}/students-data`);
+        const response = await fetch(`/teacher/class/{{ class.id }}/active-students`);
         const data = await response.json();
         if (data.students) {
             updateStudentsTable(data.students);
             document.getElementById('studentCount').textContent = data.students.length;
-            showToast(`✅ ${data.students.length} оқушы жаңартылды`);
         }
     } catch (error) {
-        showToast('❌ Қате орын алды');
+        console.error('Refresh error:', error);
     }
 }
 
@@ -456,6 +465,7 @@ function updateStudentsTable(students) {
     tbody.innerHTML = '';
     students.forEach(s => {
         const row = tbody.insertRow();
+        const isActive = s.is_active == 1 || s.is_active === true;
         row.innerHTML = `
             <td>
                 <div class="student-cell">
@@ -463,9 +473,17 @@ function updateStudentsTable(students) {
                     <div><div class="student-name">${escapeHtml(s.name)}</div></div>
                 </div>
             </td>
-            <td class="student-email">${escapeHtml(s.email)}</td>
-            <td class="joined-date">${s.joined_at || '—'}</td>
-            <td><span class="badge badge-green">✅ Қосылды</span></td>
+            <td>
+                <div class="student-login">${escapeHtml(s.email)}</div>
+                <div class="student-password">🔑 ${escapeHtml(s.password || '')}</div>
+            </td>
+            <td class="joined-date">${s.joined_at ? s.joined_at.slice(0,16) : '—'}</td>
+            <td>
+                <span class="online-dot ${isActive ? 'active' : ''}" data-id="${s.id}"></span>
+                ${isActive
+                    ? '<span style="color:var(--green);font-size:12px;font-weight:600;">Тест тапсыруда</span>'
+                    : '<span class="badge badge-green">Қосылды</span>'}
+            </td>
         `;
     });
 }

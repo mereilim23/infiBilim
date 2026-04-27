@@ -46,8 +46,8 @@ function showEmptyState() {
         <div class="empty-state">
             <div class="empty-icon">📜</div>
             <h3>Әлі сертификат жоқ</h3>
-            <p>Курстарды аяқтап, алғашқы сертификатыңызды алыңыз!</p>
-            <a href="/glav" class="empty-btn">Курстарды бастау</a>
+            <p>Бөлімді аяқтап, алғашқы сертификатыңызды алыңыз!</p>
+            <a href="/glav" class="empty-btn">Оқуды бастау</a>
         </div>
     `;
 }

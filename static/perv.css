@@ -801,7 +801,7 @@ body {
 /* --- Смартфон (до 767px) --- */
 @media (max-width: 767px) {
   .hamburger-btn { display: flex; }
-  .contact-btn { display: none; }
+  .contact-btn { display: flex; width: 100%; justify-content: center; margin-top: 8px; }
 
   .nav-menu {
     display: none;
