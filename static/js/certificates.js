@@ -30,7 +30,7 @@ function displayCertificates(certificates) {
             <div class="certificate-icon">🏅</div>
             <div class="certificate-info">
                 <h3 class="certificate-title">${cert.section_name || 'Сертификат'}</h3>
-                <p class="certificate-meta">${new Date(cert.issued_at).toLocaleDateString('kk-KZ')}</p>
+                <p class="certificate-meta">${formatDateKaz(cert.issued_at)}</p>
                 <div class="certificate-badge">
                     <span>${cert.score}%</span>
                 </div>
@@ -52,6 +52,12 @@ function showEmptyState() {
     `;
 }
 
+function formatDateKaz(dateStr) {
+    const d = new Date(dateStr);
+    const months = ['қаңтар','ақпан','наурыз','сәуір','мамыр','маусым','шілде','тамыз','қыркүйек','қазан','қараша','желтоқсан'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} жыл`;
+}
+
 function showCertificatePreview(cert) {
     currentCertificateHtml = generateCertificateHtml(cert);
     const previewDiv = document.getElementById('certificatePreview');
@@ -65,11 +71,7 @@ function showCertificatePreview(cert) {
 }
 
 function generateCertificateHtml(cert) {
-    const date = new Date(cert.issued_at).toLocaleDateString('kk-KZ', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+    const date = formatDateKaz(cert.issued_at);
 
     return `
         <div style="
@@ -86,8 +88,8 @@ function generateCertificateHtml(cert) {
             <div style="width: 60px; height: 2px; background: #fbbf24; margin: 0 auto 24px;"></div>
             <p style="color: #451a03; margin-bottom: 8px;">Мына сертификат беріледі</p>
             <h3 style="font-size: 24px; color: #6366f1; margin-bottom: 16px;">${cert.student_name || 'Пайдаланушы'}</h3>
-            <p style="color: #451a03; margin-bottom: 16px;">${cert.section_name || 'Бөлім'}</p>
-            <p style="color: #78350f; margin-bottom: 24px;">${cert.score}% нәтижемен аяқтағаны үшін</p>
+            <p style="color: #451a03; margin-bottom: 16px;">${cert.section_name || 'Бөлім'} бөлімін</p>
+            <p style="color: #78350f; margin-bottom: 24px;">${cert.score}% нәтижемен сәтті аяқтағаны үшін</p>
             <div style="width: 60px; height: 2px; background: #fbbf24; margin: 0 auto 24px;"></div>
             <p style="color: #451a03; font-size: 12px;">Код: ${cert.certificate_code}</p>
             <p style="color: #78350f; font-size: 12px;">${date}</p>
@@ -115,7 +117,6 @@ function downloadCurrentCertificate() {
 document.addEventListener('DOMContentLoaded', () => {
     loadCertificates();
 
-    // Download button
     const downloadBtn = document.getElementById('downloadCertBtn');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', downloadCurrentCertificate);
