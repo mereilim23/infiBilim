@@ -339,7 +339,7 @@
             <div class="class-meta">
                 👥 <span id="studentCount">{{ students|length }}</span> оқушы •
                 {{ class.class_level if class.class_level else 7 }}-сынып бағдарламасы •
-                Құрылған: {{ class.created_at[:10] if class.created_at else '—' }}
+                Құрылған: {{ class.created_at.strftime('%Y-%m-%d') if class.created_at else '—' }}
             </div>
         </div>
         <div class="invite-block">
