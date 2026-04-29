@@ -68,7 +68,6 @@
 
         main { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
 
-        /* Class header */
         .class-header {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -107,7 +106,6 @@
 
         .invite-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
-        /* Action buttons */
         .action-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
 
         .action-btn {
@@ -125,7 +123,6 @@
         .action-btn.secondary { background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; }
         .action-btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        /* Summary cards */
         .summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
 
         .summary-card {
@@ -142,7 +139,6 @@
         .summary-num.yellow { color: var(--yellow); }
         .summary-num.purple { color: #a78bfa; }
 
-        /* Students table */
         .table-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -291,7 +287,6 @@
             td:nth-child(3), th:nth-child(3) { display: none; }
         }
 
-        /* ===== АДАПТАЦИЯ (dark teacher pages) ===== */
         @media (min-width: 768px) and (max-width: 1023px) {
             header { padding: 0 20px; }
             main { padding: 28px 20px; }
@@ -301,14 +296,11 @@
             .back-btn { font-size: 12px; padding: 6px 10px; }
             .back-btn span { display: none; }
             main { padding: 20px 16px; }
-            .page-title { font-size: 20px; }
-            .page-sub { font-size: 12px; }
             table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
             thead, tbody, tr { min-width: 500px; }
             td, th { padding: 10px 12px; font-size: 12px; }
             .student-name { font-size: 13px; }
             .student-avatar { width: 30px; height: 30px; font-size: 12px; }
-            .prog-wrap { min-width: 90px; }
             .badge { font-size: 11px; padding: 3px 8px; }
             .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
             .stat-value, .stat-val { font-size: 22px; }
@@ -317,9 +309,7 @@
         }
         @media (max-width: 480px) {
             .stats-grid, .stats-row { grid-template-columns: 1fr 1fr; }
-            .page-title { font-size: 17px; }
         }
-
     </style>
 </head>
 <body>
@@ -405,7 +395,7 @@
                         <div class="student-login">{{ s.email }}</div>
                         <div class="student-password">🔑 {{ s.password }}</div>
                     </td>
-                    <td class="joined-date">{{ s.joined_at[:16] if s.joined_at else '—' }}</td>
+                    <td class="joined-date">{{ s.joined_at.strftime('%Y-%m-%d %H:%M') if s.joined_at else '—' }}</td>
                     <td>
                         <span class="online-dot {% if s.is_active %}active{% endif %}" data-id="{{ s.id }}"></span>
                         {% if s.is_active %}<span style="color:var(--green);font-size:12px;font-weight:600;">Тест тапсыруда</span>{% else %}<span class="badge badge-green">Қосылды</span>{% endif %}
