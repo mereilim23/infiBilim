@@ -9,7 +9,7 @@ import json
 app = FastAPI()
 
 # ─── Database ───────────────────────────────────────────────
-db = Database("data/users.db")
+db = Database()
 db.create_tables()
 
 # ─── Templates & Static ────────────────────────────────────
